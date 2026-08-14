@@ -1,3 +1,6 @@
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Recover the missing full Qwen-BCCC prediction pair with serial GPU shards.
 
 Each shard runs ordinary one-record-at-a-time greedy inference. There is no

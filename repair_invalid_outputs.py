@@ -1,3 +1,6 @@
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Repair invalid chunks without re-running already valid predictions.
 
 The initial run exposed two deterministic model behaviours that strict JSON

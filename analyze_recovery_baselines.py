@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Leakage-controlled recovery baselines for the TACE analysis.
 
 This script uses the existing frozen model predictions and the exact outer-fold

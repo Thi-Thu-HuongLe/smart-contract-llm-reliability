@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Robustness analysis for the selectively repaired benchmark predictions.
 
 This is an analysis-only pipeline: it never imports Transformers, loads a

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Cross-fitted taxonomy-aware calibration for frozen-model predictions.
 
 TACE (taxonomy-aware calibrated ensemble) is an analysis-only, post-inference

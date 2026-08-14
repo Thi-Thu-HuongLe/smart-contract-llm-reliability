@@ -1,3 +1,6 @@
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Read-only integrity and progress report for an interrupted inference run."""
 
 from __future__ import annotations

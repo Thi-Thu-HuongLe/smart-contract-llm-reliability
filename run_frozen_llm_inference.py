@@ -1,3 +1,6 @@
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Failure-aware, resumable smart-contract vulnerability detection.
 
 This is the GPU inference pipeline for the reliability benchmark. It deliberately

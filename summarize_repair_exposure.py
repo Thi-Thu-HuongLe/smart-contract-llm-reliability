@@ -1,3 +1,6 @@
+# Copyright 2026 Thi-Thu-Huong Le
+# SPDX-License-Identifier: Apache-2.0
+
 """Report first-attempt failures and recovery exposure from frozen JSONL runs.
 
 This is a CPU-only audit helper. It does not run model inference or change any

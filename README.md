@@ -82,3 +82,12 @@ Use `python run_frozen_llm_inference.py --help` to inspect GPU inference
 options. A complete inference run requires access to the pinned model
 snapshots and sufficient GPU memory.
 
+## License
+
+Unless otherwise noted, the source code and original documentation in this
+repository are licensed under the Apache License, Version 2.0. Copyright 2026
+Thi-Thu-Huong Le. See `LICENSE` and `NOTICE`.
+
+This license does not grant rights to third-party datasets, model weights,
+model-generated outputs, or other external materials. Those materials remain
+subject to the terms of their respective providers.
