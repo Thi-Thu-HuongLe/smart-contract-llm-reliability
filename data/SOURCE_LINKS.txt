@@ -1,0 +1,24 @@
+BENCHMARK SOURCES
+
+SmartBugs Curated
+https://github.com/smartbugs/smartbugs-curated
+https://doi.org/10.1145/3324884.3415298
+
+ScrawlD
+https://github.com/sujeetc/ScrawlD
+https://arxiv.org/abs/2202.11409
+
+BCCC-VulSCs-2023
+https://www.yorku.ca/research/bccc/ucs-technical/cybersecurity-datasets-cds/vulnerable-smart-contracts-bccc-vulscs-2023/
+https://doi.org/10.1016/j.bcra.2023.100171
+
+FROZEN MODEL REPOSITORIES
+
+Qwen2.5-Coder-7B-Instruct
+https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct
+
+CodeLlama-7B-Instruct
+https://huggingface.co/codellama/CodeLlama-7b-Instruct-hf
+
+Mistral-7B-Instruct-v0.3
+https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3

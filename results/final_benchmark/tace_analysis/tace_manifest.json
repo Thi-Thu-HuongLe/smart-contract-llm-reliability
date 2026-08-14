@@ -1,0 +1,169 @@
+{
+  "schema_version": "tace-crossfit-analysis",
+  "method": "TACE (cross-fitted empirical-Bayes ensemble)",
+  "method_scope": "analysis-only post-inference fusion; no model generation or retraining",
+  "generated_at_utc": "2026-08-14T02:04:08.813730+00:00",
+  "generator": "analyze_tace_crossfit.py",
+  "generator_sha256": "f0aa7492c1d05f8c494eadf78f9998327154f3eb82db19626f080ca9d80b3d83",
+  "prediction_root": "results/final_benchmark",
+  "parameters": {
+    "outer_folds": 5,
+    "inner_folds": 3,
+    "candidate_thresholds": [
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95
+    ],
+    "selective_confidence": [
+      0.8,
+      0.9,
+      0.95
+    ],
+    "pattern_shrinkage": 8.0,
+    "bootstrap_repetitions": 2000,
+    "seed": 20260811
+  },
+  "method_notes": [
+    "Class-wise calibration maps each three-model agreement pattern to an empirical-Bayes posterior.",
+    "The estimator makes no conditional-independence claim about the three models.",
+    "Every reported TACE posterior is fitted without that record's outer test fold.",
+    "TACE-F1 and TACE-Macro thresholds are selected only with nested inner folds; fixed confidence values define the selective curve.",
+    "BCCC is evaluated as binary vulnerable-versus-secure; SmartBugs-Curated and ScrawlD are closed-taxonomy multilabel tasks."
+  ],
+  "environment": {
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.5.1",
+    "platform": "Windows-11-10.0.22631-SP0"
+  },
+  "ground_truth_files": [
+    {
+      "dataset": "scrawld",
+      "path": "data/scrawld_vulnerabilities.json",
+      "sha256": "72ddf83639a5cbabaf2755ed0593ee98959d879148ff9d12550c28ffd85493f0"
+    },
+    {
+      "dataset": "smartbugs",
+      "path": "data/smartbugs_curated.json",
+      "sha256": "e31d05a40b5affc3864357c7c4710fcb968705d6dc7b2562e5d4773293ce3d60"
+    }
+  ],
+  "source_jsonl": [
+    {
+      "dataset_model": "bccc/CodeLlama-7B-Instruct",
+      "path": "results/final_benchmark/bccc/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_bccc.jsonl",
+      "bytes": 178124361,
+      "sha256": "3f38347ca6e2e42ef756991fe49c3b5e4ee1719801fce9fc0021c8747fee6a84"
+    },
+    {
+      "dataset_model": "bccc/Mistral-7B-Instruct-v0.3",
+      "path": "results/final_benchmark/bccc/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_bccc.jsonl",
+      "bytes": 86740221,
+      "sha256": "d1439b91f08e92df9ad42e0fb64e0b01aea2c76748088657781ca1c3330664bf"
+    },
+    {
+      "dataset_model": "bccc/Qwen2.5-Coder-7B-Instruct",
+      "path": "results/final_benchmark/bccc/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_bccc.jsonl",
+      "bytes": 54184050,
+      "sha256": "3e64f9dea68ea212f9ecf3dc9c54a3206a5782e9296356a13cc07247490b4a49"
+    },
+    {
+      "dataset_model": "scrawld/CodeLlama-7B-Instruct",
+      "path": "results/final_benchmark/scrawld/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_scrawld.jsonl",
+      "bytes": 77385162,
+      "sha256": "499a9425603050184f7862a4c564c67839e588e9c6618b7728c4d7bd16521f4d"
+    },
+    {
+      "dataset_model": "scrawld/Mistral-7B-Instruct-v0.3",
+      "path": "results/final_benchmark/scrawld/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_scrawld.jsonl",
+      "bytes": 36397445,
+      "sha256": "6260017a034292af771bf8536096097e4b4a0590c278c00994ca35e72ea6b360"
+    },
+    {
+      "dataset_model": "scrawld/Qwen2.5-Coder-7B-Instruct",
+      "path": "results/final_benchmark/scrawld/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_scrawld.jsonl",
+      "bytes": 27927049,
+      "sha256": "6b092c79d947e7ca435f70c99d13e440f52031392d21f0e4eb339e756012dae7"
+    },
+    {
+      "dataset_model": "smartbugs/CodeLlama-7B-Instruct",
+      "path": "results/final_benchmark/smartbugs/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_smartbugs.jsonl",
+      "bytes": 980048,
+      "sha256": "e0f2c0f67f309daba35a7cd8b16fcdec6654a8ea1525a54eb23231a18923c49c"
+    },
+    {
+      "dataset_model": "smartbugs/Mistral-7B-Instruct-v0.3",
+      "path": "results/final_benchmark/smartbugs/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_smartbugs.jsonl",
+      "bytes": 391295,
+      "sha256": "e812d797f4685040671d4bad32ff1fdfbbccbb85694e33d4c8894a9d10a4c19e"
+    },
+    {
+      "dataset_model": "smartbugs/Qwen2.5-Coder-7B-Instruct",
+      "path": "results/final_benchmark/smartbugs/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_smartbugs.jsonl",
+      "bytes": 357717,
+      "sha256": "057dc1eebb5c4dc9259a38a5029fe2904c7239f9d14b426e1ae594c7f73a4f31"
+    }
+  ],
+  "generated_files": [
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_calibration_summary.csv",
+      "bytes": 370,
+      "sha256": "86115ce810df2c1d0b5f5ac6e5339d5bc071d79c533000354bd70e1c6c826c00"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_fold_assignments.csv",
+      "bytes": 2237836,
+      "sha256": "a145dde535affdc6d5dfba4f1114e10fcd092d67d03667d028004f686354c7e1"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_oof_per_class.csv",
+      "bytes": 4766,
+      "sha256": "f8930794e827cf338bf51cb00d9e7505b8401e39f13ba4a84e6856081f007881"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_oof_predictions.csv",
+      "bytes": 6459674,
+      "sha256": "563a5bfbcec21c72d961b8495ee7a8088ed662b4f1e2cb6c520c8171ae68207f"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_oof_summary.csv",
+      "bytes": 5656,
+      "sha256": "f0027f4c3e2b5cf0b6149f1aa6339781823308bc16ff1ba1f66fcbbfae291df3"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_paired_bootstrap.csv",
+      "bytes": 3069,
+      "sha256": "764bd85f9f2dac0bd6cf0a8338ca8100a77e25382096ea22c2f85facc155da44"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_reliability_bins.csv",
+      "bytes": 2013,
+      "sha256": "de3fbc245fa4f3ba7495fc0dfefcf07ff598c06dc890e1253d32c852121a1d20"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_selective_risk_coverage.csv",
+      "bytes": 1207,
+      "sha256": "2fa4a6749b1986ed0fe5f5796574c89e3210f95833c88bdc7028246593e3def3"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_threshold_selection.csv",
+      "bytes": 78941,
+      "sha256": "b8667579ab546a4e697a32fc461a7fa41666b46bbf3dda040a79e5b2c269373b"
+    }
+  ]
+}

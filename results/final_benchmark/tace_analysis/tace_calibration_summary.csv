@@ -1,0 +1,4 @@
+dataset,system,brier_score,ece_10_bins,class_decisions
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.0184085903562466,0.0332302550805965,1430
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.08774147595465795,0.001171187700526845,45312
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.249172331624215,0.0014209725434905919,19512

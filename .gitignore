@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+outputs/
+
+# Analysis-ready datasets are distributed through their original repositories
+# or a DOI-backed research archive, not ordinary Git.
+data/*.json
+
+# Raw predictions exceed practical GitHub limits and may contain machine-local
+# provenance paths. Track the derived CSV/JSON summaries below these folders.
+results/final_benchmark/smartbugs/*.jsonl
+results/final_benchmark/smartbugs/*.metadata.json
+results/final_benchmark/scrawld/*.jsonl
+results/final_benchmark/scrawld/*.metadata.json
+results/final_benchmark/bccc/*.jsonl
+results/final_benchmark/bccc/*.metadata.json

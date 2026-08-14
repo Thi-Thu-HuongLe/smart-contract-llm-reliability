@@ -1,0 +1,10 @@
+dataset,system,confidence,class_decisions_total,accepted_decisions,abstained_decisions,decision_coverage,accepted_decision_risk,accepted_positive_alerts,accepted_positive_precision
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.8,1430,1371,59,0.9587412587412587,0.0087527352297593,76,1.0
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.9,1430,1263,167,0.8832167832167832,0.007125890736342043,0,0.0
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.95,1430,1213,217,0.8482517482517482,0.00741962077493817,0,0.0
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.8,45312,32983,12329,0.7279087217514124,0.052057120334717884,5,0.6
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.9,45312,25814,19498,0.5696945621468926,0.01719996900906485,0,0.0
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.95,45312,22513,22799,0.4968441031073446,0.007195842402167637,0,0.0
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.8,19512,0,19512,0.0,0.0,0,0.0
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.9,19512,0,19512,0.0,0.0,0,0.0
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),0.95,19512,0,19512,0.0,0.0,0,0.0

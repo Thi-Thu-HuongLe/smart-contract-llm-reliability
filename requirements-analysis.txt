@@ -1,0 +1,2 @@
+# Analysis-only dependencies; no CUDA, PyTorch, or Transformers are required.
+numpy==2.3.2
