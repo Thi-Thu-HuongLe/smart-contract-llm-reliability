@@ -82,11 +82,3 @@ Use `python run_frozen_llm_inference.py --help` to inspect GPU inference
 options. A complete inference run requires access to the pinned model
 snapshots and sufficient GPU memory.
 
-## Source portability
-
-All Python source files in this repository use ASCII characters only and have
-no UTF-8 byte-order mark. The raw JSONL files remain immutable and are
-identified by `results/RAW_PREDICTION_SHA256SUMS.txt`.
-
-No synthetic oversampling, smoke-run prediction, abandoned model, or simulated
-human review is part of the retained results.
