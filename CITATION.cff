@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the archived release."
+title: "Smart-Contract LLM Reliability Benchmark"
+version: "1.0.0"
+date-released: 2026-09-10
+type: software
+license: Apache-2.0
+repository-code: "https://github.com/Thi-Thu-HuongLe/smart-contract-llm-reliability"
+abstract: >-
+  Reproducible software for failure-visible evaluation of frozen code language
+  models on SmartBugs-Curated, ScrawlD, and BCCC, including structured-output
+  validation, selective recovery, benchmark evaluation, robustness analyses,
+  and cross-fitted taxonomy-aware calibration.
+authors:
+  - given-names: Thi-Thu-Huong
+    family-names: Le
+    affiliation: Blockchain Platform Research Center, Pusan National University
+  - given-names: Jiseong
+    family-names: Park
+    affiliation: SmartM2M
+  - given-names: Shinwook
+    family-names: Heo
+    affiliation: SmartM2M; School of Computer Science and Engineering, Pusan National University
+  - given-names: Howon
+    family-names: Kim
+    affiliation: SmartM2M; School of Computer Science and Engineering, Pusan National University
+keywords:
+  - smart contracts
+  - vulnerability detection
+  - code language models
+  - reliability benchmarking
+  - calibration
+  - selective prediction
