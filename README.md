@@ -40,9 +40,7 @@ smart-contract-llm-reliability/
 `-- analyze_recovery_baselines.py
 ```
 
-Large analysis-ready inputs and raw model predictions are intentionally not
-tracked by ordinary Git. See `data/README.md` and `results/README.md` for the
-expected filenames and publication guidance.
+
 
 ## Main programs
 
@@ -143,14 +141,3 @@ The default inference command is intentionally omitted because a complete run
 requires selecting available GPUs and confirming access to the pinned model
 snapshots. Use `python run_frozen_llm_inference.py --help` to inspect all
 runtime options.
-
-## Data and provenance policy
-
-The nine frozen JSONL prediction files are the immutable basis of the reported
-results. Renaming and repository cleanup did not alter their contents. A few
-legacy field values remain inside those frozen records solely so their
-provenance can be verified; new outputs use descriptive, version-neutral field
-names.
-
-No synthetic oversampling, smoke-run prediction, abandoned model, or simulated
-human review is part of the retained results.
