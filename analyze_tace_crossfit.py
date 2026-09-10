@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-# Copyright 2026 Thi-Thu-Huong Le
-# SPDX-License-Identifier: Apache-2.0
-
 """Cross-fitted taxonomy-aware calibration for frozen-model predictions.
 
 TACE (taxonomy-aware calibrated ensemble) is an analysis-only, post-inference
@@ -140,6 +137,16 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default=8.0,
         help="Fixed empirical-Bayes pseudo-count for an agreement pattern.",
     )
+    parser.add_argument(
+        "--shrinkage-grid",
+        type=float,
+        nargs="*",
+        default=[2.0, 4.0, 8.0, 16.0, 32.0],
+        help=(
+            "Pseudo-count values for a nested cross-fitted sensitivity analysis. "
+            "Pass the option without values to disable the sweep."
+        ),
+    )
     parser.add_argument("--bootstrap-repetitions", type=int, default=2_000)
     parser.add_argument("--seed", type=int, default=20260811)
     args = parser.parse_args(argv)
@@ -149,6 +156,8 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         parser.error("--inner-folds must be at least 2")
     if args.shrinkage <= 0:
         parser.error("--shrinkage must be positive")
+    if any(value <= 0 for value in args.shrinkage_grid):
+        parser.error("--shrinkage-grid values must be positive")
     if args.bootstrap_repetitions < 100:
         parser.error("--bootstrap-repetitions must be at least 100")
     for value in args.thresholds:
@@ -159,6 +168,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
             parser.error("--selective-confidence values must be in [0.5, 1.0]")
     args.thresholds = sorted(set(args.thresholds))
     args.selective_confidence = sorted(set(args.selective_confidence))
+    args.shrinkage_grid = sorted(set(args.shrinkage_grid + [args.shrinkage]))
     return args
 
 
@@ -621,6 +631,51 @@ def brier_and_bins(
     return {"brier_score": brier, "ece_10_bins": ece, "class_decisions": len(values)}, bins
 
 
+def class_calibration_rows(
+    dataset: str,
+    records: dict[str, Record],
+    keys: Sequence[str],
+    labels: Sequence[str],
+    scores: dict[str, dict[str, float]],
+) -> list[dict[str, Any]]:
+    """Report calibration separately for every class, including rare classes."""
+
+    rows: list[dict[str, Any]] = []
+    for label in labels:
+        values = [(scores[key][label], int(label in records[key].truth)) for key in keys]
+        support = sum(truth for _, truth in values)
+        brier = safe_divide(sum((score - truth) ** 2 for score, truth in values), len(values))
+        ece = 0.0
+        nonempty_bins = 0
+        for index in range(10):
+            low, high = index / 10.0, (index + 1) / 10.0
+            members = [
+                pair for pair in values
+                if (low <= pair[0] < high) or (index == 9 and pair[0] == 1.0)
+            ]
+            if not members:
+                continue
+            nonempty_bins += 1
+            mean_score = sum(score for score, _ in members) / len(members)
+            empirical_rate = sum(truth for _, truth in members) / len(members)
+            ece += len(members) / len(values) * abs(mean_score - empirical_rate)
+        rows.append(
+            {
+                "dataset": DATASET_NAMES[dataset],
+                "system": METHOD_F1_NAME,
+                "taxonomy_class": label,
+                "records": len(values),
+                "support": support,
+                "prevalence": safe_divide(support, len(values)),
+                "brier_score": brier,
+                "ece_10_bins": ece,
+                "nonempty_bins": nonempty_bins,
+                "zero_support": support == 0,
+            }
+        )
+    return rows
+
+
 def selective_rows(
     dataset: str,
     records: dict[str, Record],
@@ -631,8 +686,15 @@ def selective_rows(
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     total = len(keys) * len(labels)
+    total_truth_positive = sum(
+        label in records[key].truth for key in keys for label in labels
+    )
     for confidence in confidences:
         accepted = errors = accepted_positive = positive_tp = 0
+        accepted_negative = positive_fp = negative_fn = 0
+        candidate_positive = sum(
+            scores[key][label] >= 0.5 for key in keys for label in labels
+        )
         for key in keys:
             for label in labels:
                 score = scores[key][label]
@@ -644,10 +706,13 @@ def selective_rows(
                         positive_tp += 1
                     else:
                         errors += 1
+                        positive_fp += 1
                 elif score <= 1.0 - confidence:
                     accepted += 1
+                    accepted_negative += 1
                     if truth:
                         errors += 1
+                        negative_fn += 1
         rows.append(
             {
                 "dataset": DATASET_NAMES[dataset],
@@ -660,9 +725,64 @@ def selective_rows(
                 "accepted_decision_risk": safe_divide(errors, accepted),
                 "accepted_positive_alerts": accepted_positive,
                 "accepted_positive_precision": safe_divide(positive_tp, accepted_positive),
+                "accepted_positive_false_discovery_risk": safe_divide(positive_fp, accepted_positive),
+                "accepted_positive_alert_coverage": safe_divide(accepted_positive, candidate_positive),
+                "ground_truth_positive_recall": safe_divide(positive_tp, total_truth_positive),
+                "accepted_negative_decisions": accepted_negative,
+                "accepted_negative_error_risk": safe_divide(negative_fn, accepted_negative),
+                "ground_truth_positive_decisions": total_truth_positive,
+                "candidate_positive_decisions_at_0_5": candidate_positive,
             }
         )
     return rows
+
+
+def crossfit_f1_for_shrinkage(
+    dataset: str,
+    records: dict[str, Record],
+    keys: Sequence[str],
+    labels: Sequence[str],
+    outer_folds: Sequence[Sequence[str]],
+    inner_folds: int,
+    thresholds: Sequence[float],
+    shrinkage: float,
+    seed: int,
+) -> tuple[dict[str, frozenset[str]], dict[int, float]]:
+    """Repeat the full nested F1 operating-point protocol for one pseudo-count."""
+
+    scores: dict[str, dict[str, float]] = {}
+    threshold_by_fold: dict[int, float] = {}
+    fold_by_key: dict[str, int] = {}
+    objective = "balanced_accuracy" if dataset == "bccc" else "micro_f1"
+    for fold_index, test_keys in enumerate(outer_folds):
+        test_set = set(test_keys)
+        train_keys = [key for key in keys if key not in test_set]
+        threshold, _ = tune_threshold(
+            train_keys=train_keys,
+            records=records,
+            labels=labels,
+            dataset=dataset,
+            inner_folds=inner_folds,
+            thresholds=thresholds,
+            shrinkage=shrinkage,
+            seed=seed + 10_000 * (fold_index + 1),
+            objective=objective,
+        )
+        threshold_by_fold[fold_index] = threshold
+        calibrator = fit_calibrator(train_keys, records, labels, shrinkage)
+        scores.update(score_keys(test_keys, records, labels, calibrator))
+        for key in test_keys:
+            fold_by_key[key] = fold_index
+    if set(scores) != set(keys) or set(fold_by_key) != set(keys):
+        raise RuntimeError(f"Shrinkage-sweep OOF coverage failure for {dataset}")
+    predictions = {
+        key: frozenset(
+            label for label, score in scores[key].items()
+            if score >= threshold_by_fold[fold_by_key[key]]
+        )
+        for key in keys
+    }
+    return predictions, threshold_by_fold
 
 
 def contribution_arrays(
@@ -747,6 +867,8 @@ def paired_bootstrap_rows(
                 "bootstrap_ci95_upper": upper,
                 "bootstrap_repetitions": repetitions,
                 "ci_excludes_zero": bool(lower > 0.0 or upper < 0.0),
+                "uncertainty_scope": "conditional_on_fixed_oof_predictions",
+                "pipeline_refitted_within_bootstrap": False,
             }
         )
     return rows
@@ -776,7 +898,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     all_per_class: list[dict[str, Any]] = []
     all_selective: list[dict[str, Any]] = []
     all_reliability_bins: list[dict[str, Any]] = []
+    all_class_calibration: list[dict[str, Any]] = []
     all_bootstrap: list[dict[str, Any]] = []
+    all_shrinkage_sensitivity: list[dict[str, Any]] = []
     oof_rows: list[dict[str, Any]] = []
     calibration_summaries: list[dict[str, Any]] = []
 
@@ -879,6 +1003,59 @@ def main(argv: Sequence[str] | None = None) -> int:
             for key in keys
         } if dataset != "bccc" else None
 
+        dataset_shrinkage_rows: list[dict[str, Any]] = []
+        for candidate_shrinkage in args.shrinkage_grid:
+            if abs(candidate_shrinkage - args.shrinkage) <= 1e-12:
+                candidate_predictions = tace_f1_predictions
+                candidate_thresholds = selected_thresholds_f1
+            else:
+                print(
+                    f"  shrinkage sensitivity lambda={candidate_shrinkage:g}", flush=True
+                )
+                candidate_predictions, candidate_thresholds = crossfit_f1_for_shrinkage(
+                    dataset=dataset,
+                    records=records,
+                    keys=keys,
+                    labels=labels,
+                    outer_folds=outer,
+                    inner_folds=args.inner_folds,
+                    thresholds=args.thresholds,
+                    shrinkage=candidate_shrinkage,
+                    seed=args.seed,
+                )
+            candidate_summary: list[dict[str, Any]] = []
+            append_system_summary(
+                candidate_summary,
+                dataset,
+                METHOD_F1_NAME,
+                keys,
+                records,
+                candidate_predictions,
+                labels,
+                "nested cross-fitted shrinkage sensitivity",
+            )
+            row = candidate_summary[0]
+            row.update(
+                {
+                    "shrinkage": candidate_shrinkage,
+                    "configured_primary_shrinkage": args.shrinkage,
+                    "selected_thresholds_by_fold": json.dumps(
+                        candidate_thresholds, sort_keys=True
+                    ),
+                    "selected_threshold_min": min(candidate_thresholds.values()),
+                    "selected_threshold_max": max(candidate_thresholds.values()),
+                }
+            )
+            dataset_shrinkage_rows.append(row)
+        reference_value = next(
+            float(row["primary_value"])
+            for row in dataset_shrinkage_rows
+            if abs(float(row["shrinkage"]) - args.shrinkage) <= 1e-12
+        )
+        for row in dataset_shrinkage_rows:
+            row["delta_primary_vs_configured"] = float(row["primary_value"]) - reference_value
+        all_shrinkage_sensitivity.extend(dataset_shrinkage_rows)
+
         append_system_summary(
             summaries, dataset, METHOD_F1_NAME, keys, records, tace_f1_predictions, labels,
             "nested cross-fitted calibration + nested selection of micro-F1 (or BCCC balanced accuracy)",
@@ -911,6 +1088,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         calibration, bins = brier_and_bins(dataset, records, keys, labels, oof_scores)
         calibration_summaries.append({"dataset": DATASET_NAMES[dataset], "system": METHOD_F1_NAME, **calibration})
         all_reliability_bins.extend(bins)
+        all_class_calibration.extend(
+            class_calibration_rows(dataset, records, keys, labels, oof_scores)
+        )
         all_bootstrap.extend(paired_bootstrap_rows(
             np, dataset, keys, records, labels, tace_f1_predictions, METHOD_F1_NAME,
             args.bootstrap_repetitions,
@@ -944,9 +1124,28 @@ def main(argv: Sequence[str] | None = None) -> int:
     write_csv(output_root / "tace_fold_assignments.csv", fold_rows)
     write_csv(output_root / "tace_selective_risk_coverage.csv", all_selective)
     write_csv(output_root / "tace_calibration_summary.csv", calibration_summaries)
+    write_csv(output_root / "tace_calibration_per_class.csv", all_class_calibration)
     write_csv(output_root / "tace_reliability_bins.csv", all_reliability_bins)
     write_csv(output_root / "tace_paired_bootstrap.csv", all_bootstrap)
+    write_csv(output_root / "tace_shrinkage_sensitivity.csv", all_shrinkage_sensitivity)
     write_csv(output_root / "tace_oof_predictions.csv", oof_rows)
+    bccc_confusion = [
+        {
+            "dataset": row["dataset"],
+            "system": row["system"],
+            "tn": row["tn"],
+            "fp": row["fp"],
+            "fn": row["fn"],
+            "tp": row["tp"],
+            "precision": row["precision"],
+            "recall": row["recall"],
+            "specificity": row["specificity"],
+            "balanced_accuracy": row["balanced_accuracy"],
+            "mcc": row["mcc"],
+        }
+        for row in summaries if row["dataset"] == DATASET_NAMES["bccc"]
+    ]
+    write_csv(output_root / "tace_bccc_confusion_matrix.csv", bccc_confusion)
 
     generated = sorted(output_root.glob("tace_*.csv"))
     manifest = {
@@ -963,6 +1162,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             "candidate_thresholds": args.thresholds,
             "selective_confidence": args.selective_confidence,
             "pattern_shrinkage": args.shrinkage,
+            "shrinkage_sensitivity_grid": args.shrinkage_grid,
             "bootstrap_repetitions": args.bootstrap_repetitions,
             "seed": args.seed,
         },
@@ -972,6 +1172,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             "Every reported TACE posterior is fitted without that record's outer test fold.",
             "TACE-F1 and TACE-Macro thresholds are selected only with nested inner folds; fixed confidence values define the selective curve.",
             "BCCC is evaluated as binary vulnerable-versus-secure; SmartBugs-Curated and ScrawlD are closed-taxonomy multilabel tasks.",
+            "Paired bootstrap intervals are conditional on the retained OOF predictions; calibration and threshold fitting are not repeated inside each bootstrap sample.",
         ],
         "environment": {"python": sys.version, "numpy": np.__version__, "platform": platform.platform()},
         "ground_truth_files": [

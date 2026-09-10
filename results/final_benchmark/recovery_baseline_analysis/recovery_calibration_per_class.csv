@@ -1,0 +1,58 @@
+dataset,system,taxonomy_class,records,support,prevalence,brier_score,ece_10_bins,nonempty_bins,zero_support
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),access_control,143,18,0.1258741258741259,0.03185895286136621,0.06310943711922952,4,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),arithmetic,143,15,0.1048951048951049,0.01958439670753462,0.05459613344185931,3,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),bad_randomness,143,8,0.055944055944055944,0.01563752364748833,0.035168941723671236,3,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),denial_of_service,143,6,0.04195804195804196,0.015298240615395751,0.030539690806129827,3,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),other,143,3,0.02097902097902098,0.02038472824599482,0.01441356576600333,1,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),reentrancy,143,31,0.21678321678321677,0.010969059806086565,0.07644271740394709,4,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),short_addresses,143,1,0.006993006993006993,0.006878028313761552,0.005319346128786503,1,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),time_manipulation,143,5,0.03496503496503497,0.014295407276947482,0.026810529865868106,2,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),transaction_ordering,143,4,0.027972027972027972,0.02720646990476357,0.00475451038091464,1,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),unchecked_low_level_calls,143,52,0.36363636363636365,0.021973096183127084,0.10346599084704114,5,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),access_control,143,18,0.1258741258741259,0.11021100003147612,0.006428722346187327,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),arithmetic,143,15,0.1048951048951049,0.09395384263378609,0.006865463202972405,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),bad_randomness,143,8,0.055944055944055944,0.0530180869233159,0.007583058062055857,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),denial_of_service,143,6,0.04195804195804196,0.04036588894993528,0.007875506954357361,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),other,143,3,0.02097902097902098,0.02076810676348721,0.008236236865566265,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),reentrancy,143,31,0.21678321678321677,0.16989841414559817,0.004913656719109927,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),short_addresses,143,1,0.006993006993006993,0.007122895278331615,0.008452674812291613,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),time_manipulation,143,5,0.03496503496503497,0.033808701349674425,0.008019798918840922,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),transaction_ordering,143,4,0.027972027972027972,0.027347433600435712,0.008015933955506541,1,False
+SmartBugs-Curated,Prevalence-only (nested cross-fitted),unchecked_low_level_calls,143,52,0.36363636363636365,0.23146218963559217,0.002384682377313152,1,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),access_control,143,18,0.1258741258741259,0.017776394388179417,0.048310350096774285,5,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),arithmetic,143,15,0.1048951048951049,0.007574580753778571,0.04544717130860865,5,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),bad_randomness,143,8,0.055944055944055944,0.004975285072319906,0.03185471116541882,2,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),denial_of_service,143,6,0.04195804195804196,0.006382262794691161,0.03131027591693628,3,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),other,143,3,0.02097902097902098,0.01813017289926595,0.021217906604690414,2,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),reentrancy,143,31,0.21678321678321677,0.006256409895214888,0.052321599640994566,4,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),short_addresses,143,1,0.006993006993006993,0.0069433535146589224,0.0014254771132450493,1,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),time_manipulation,143,5,0.03496503496503497,0.006422840371710487,0.02931671822398459,2,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),transaction_ordering,143,4,0.027972027972027972,0.027380046360738187,0.0008636939713936274,1,False
+SmartBugs-Curated,Logistic stacker (nested cross-fitted),unchecked_low_level_calls,143,52,0.36363636363636365,0.009272348362923944,0.0584893000335015,5,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),arithmetic,5664,3956,0.6984463276836158,0.20527919544988746,0.0019445979592612398,5,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),denial_of_service,5664,0,0.0,1.863022718145212e-11,8.510879776361731e-07,1,True
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),locked_ether,5664,1696,0.2994350282485876,0.20976962997291945,0.0007715524136745888,3,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),reentrancy,5664,654,0.11546610169491525,0.10095904871119482,0.0034551652041652217,3,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),time_manipulation,5664,145,0.025600282485875706,0.02498884292272459,0.0007241156597866014,2,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),transaction_ordering,5664,1106,0.1952683615819209,0.15693102209806858,0.002545850618504669,2,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),tx_origin,5664,5,0.0008827683615819209,0.0008776464423686405,8.33937321447646e-05,1,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),unchecked_low_level_calls,5664,18,0.0031779661016949155,0.0031264220214698283,0.0010988666110678864,2,False
+ScrawlD,Prevalence-only (nested cross-fitted),arithmetic,5664,3956,0.6984463276836158,0.21061937743844847,8.762029317777031e-05,1,False
+ScrawlD,Prevalence-only (nested cross-fitted),denial_of_service,5664,0,0.0,4.866251552742195e-08,0.0002205957198133626,1,True
+ScrawlD,Prevalence-only (nested cross-fitted),locked_ether,5664,1696,0.2994350282485876,0.20977398451492735,8.77371513208769e-05,1,False
+ScrawlD,Prevalence-only (nested cross-fitted),reentrancy,5664,654,0.11546610169491525,0.10213401300346565,0.0001692112699635262,1,False
+ScrawlD,Prevalence-only (nested cross-fitted),time_manipulation,5664,145,0.025600282485875706,0.02494571586181302,0.0002081510236856647,1,False
+ScrawlD,Prevalence-only (nested cross-fitted),transaction_ordering,5664,1106,0.1952683615819209,0.15713918895974596,0.00013356516219673042,1,False
+ScrawlD,Prevalence-only (nested cross-fitted),tx_origin,5664,5,0.0008827683615819209,0.0008823843273123956,0.0002192853678116563,1,False
+ScrawlD,Prevalence-only (nested cross-fitted),unchecked_low_level_calls,5664,18,0.0031779661016949155,0.00316836198157297,0.0002185462177450425,1,False
+ScrawlD,Logistic stacker (nested cross-fitted),arithmetic,5664,3956,0.6984463276836158,0.20596657653993147,0.00956427180837365,5,False
+ScrawlD,Logistic stacker (nested cross-fitted),denial_of_service,5664,0,0.0,4.866251552742194e-08,0.00022059571981336259,1,True
+ScrawlD,Logistic stacker (nested cross-fitted),locked_ether,5664,1696,0.2994350282485876,0.20982332738543433,0.0011299478890366365,3,False
+ScrawlD,Logistic stacker (nested cross-fitted),reentrancy,5664,654,0.11546610169491525,0.10070057459913316,0.006745233793875999,3,False
+ScrawlD,Logistic stacker (nested cross-fitted),time_manipulation,5664,145,0.025600282485875706,0.024949570711910275,9.364027909511107e-05,3,False
+ScrawlD,Logistic stacker (nested cross-fitted),transaction_ordering,5664,1106,0.1952683615819209,0.15707494072934122,0.0006399160987695593,2,False
+ScrawlD,Logistic stacker (nested cross-fitted),tx_origin,5664,5,0.0008827683615819209,0.0008727815403787731,7.938831836747139e-06,1,False
+ScrawlD,Logistic stacker (nested cross-fitted),unchecked_low_level_calls,5664,18,0.0031779661016949155,0.003173830739756063,0.0006600675194488805,1,False
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),vulnerable,19512,9756,0.5,0.249172331624215,0.0014209725434905919,4,False
+BCCC,Prevalence-only (nested cross-fitted),vulnerable,19512,9756,0.5,0.2500000036933724,6.406396137499053e-05,2,False
+BCCC,Logistic stacker (nested cross-fitted),vulnerable,19512,9756,0.5,0.24921884023627436,0.0007569173303055027,3,False

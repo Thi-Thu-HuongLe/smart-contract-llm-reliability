@@ -1,0 +1,7 @@
+dataset,family_definition,records,families,multi_record_families,records_in_multi_record_families,largest_family,families_with_conflicting_truth
+SmartBugs-Curated,exact_source,143,143,0,0,1,0
+SmartBugs-Curated,lexical_normalized,143,141,2,4,2,1
+ScrawlD,exact_source,5664,5662,2,4,2,1
+ScrawlD,lexical_normalized,5664,5402,132,394,47,9
+BCCC,exact_source,19512,19508,4,8,2,1
+BCCC,lexical_normalized,19512,16632,955,3835,851,431

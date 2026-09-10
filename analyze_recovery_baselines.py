@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-# Copyright 2026 Thi-Thu-Huong Le
-# SPDX-License-Identifier: Apache-2.0
-
 """Leakage-controlled recovery baselines for the TACE analysis.
 
 This script uses the existing frozen model predictions and the exact outer-fold
@@ -45,11 +42,13 @@ from analyze_tace_crossfit import (
     append_system_summary,
     brier_and_bins,
     binary_counts,
+    class_calibration_rows,
     classwise_binary_counts,
     contribution_arrays,
     load_records,
     metrics_from_counts,
     multilabel_counts,
+    per_class_rows,
     predict_from_scores,
     primary_metric,
     repository_path,
@@ -613,6 +612,8 @@ def paired_statistics(
         "ci_excludes_zero": bool(lower > 0.0 or upper < 0.0),
         "paired_random_swap_p": permutation_p,
         "permutation_repetitions": permutation_repetitions,
+        "uncertainty_scope": "conditional_on_fixed_oof_predictions",
+        "pipeline_refitted_within_bootstrap": False,
     }
 
 
@@ -814,6 +815,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     summary_rows: list[dict[str, Any]] = []
     selection_rows: list[dict[str, Any]] = []
     calibration_rows: list[dict[str, Any]] = []
+    class_calibration: list[dict[str, Any]] = []
+    per_class_metrics: list[dict[str, Any]] = []
     comparison_rows: list[dict[str, Any]] = []
     mechanism_summary_rows: list[dict[str, Any]] = []
     pattern_rows: list[dict[str, Any]] = []
@@ -864,6 +867,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             "class-wise L2 logistic stacking; nested regularization and threshold selection",
         )
 
+        for system, predictions in (
+            (METHOD_F1_NAME, tace_predictions[dataset]),
+            (PREVALENCE_NAME, prevalence_predictions),
+            (STACKER_NAME, stacker_predictions),
+        ):
+            per_class_metrics.extend(
+                per_class_rows(dataset, records, keys, predictions, labels, system)
+            )
+
         for system, scores in (
             (METHOD_F1_NAME, tace_scores[dataset]),
             (PREVALENCE_NAME, prevalence_oof),
@@ -878,6 +890,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                     **discrimination_summary(dataset, records, keys, labels, scores),
                 }
             )
+            class_rows = class_calibration_rows(dataset, records, keys, labels, scores)
+            for row in class_rows:
+                row["system"] = system
+            class_calibration.extend(class_rows)
 
         comparisons = (
             (METHOD_F1_NAME, tace_predictions[dataset], PREVALENCE_NAME, prevalence_predictions),
@@ -940,6 +956,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "recovery_baseline_summary.csv": summary_rows,
         "recovery_nested_selection.csv": selection_rows,
         "recovery_calibration_discrimination.csv": calibration_rows,
+        "recovery_calibration_per_class.csv": class_calibration,
+        "recovery_baseline_per_class.csv": per_class_metrics,
         "recovery_paired_comparisons.csv": comparison_rows,
         "recovery_mechanism_summary.csv": mechanism_summary_rows,
         "recovery_pattern_diagnostics.csv": pattern_rows,

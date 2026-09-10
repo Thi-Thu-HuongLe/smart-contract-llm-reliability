@@ -1,0 +1,4 @@
+dataset,class_decisions,tace_positive_decisions,tace_true_positive_decisions,tace_positive_from_all_zero_pattern,fraction_tace_positive_from_all_zero_pattern,tace_true_positive_from_all_zero_pattern,fraction_tace_true_positive_from_all_zero_pattern,tace_vs_prevalence_disagreement_decisions,tace_vs_prevalence_disagreement_fraction,tace_vs_prevalence_different_records,tace_vs_stacker_disagreement_decisions,tace_vs_stacker_disagreement_fraction,tace_vs_stacker_different_records
+SmartBugs-Curated,1430,134,131,0,0.0,0,0.0,248,0.17342657342657342,143,5,0.0034965034965034965,5
+ScrawlD,45312,6154,4110,4932,0.8014299642508937,3551,0.8639902676399027,5174,0.11418608757062147,5174,1127,0.02487199858757062,1127
+BCCC,19512,16598,8494,0,0.0,0,0.0,16598,0.8506560065600656,16598,6,0.0003075030750307503,6

@@ -1,0 +1,10 @@
+dataset,system,records_expected,records_written,records_missing,records_with_findings,total_findings,status_counts,ok_output_records,partial_output_records,failed_output_records,other_status_records
+SmartBugs-Curated,Qwen2.5-Coder-7B-Instruct,143,143,0,135,136,"{""ok"": 143}",143,0,0,0
+SmartBugs-Curated,CodeLlama-7B-Instruct,143,143,0,142,251,"{""ok"": 143}",143,0,0,0
+SmartBugs-Curated,Mistral-7B-Instruct-v0.3,143,143,0,143,153,"{""ok"": 143}",143,0,0,0
+ScrawlD,Qwen2.5-Coder-7B-Instruct,5664,5664,0,395,408,"{""ok"": 5664}",5664,0,0,0
+ScrawlD,CodeLlama-7B-Instruct,5664,5664,0,5656,10633,"{""ok"": 5664}",5664,0,0,0
+ScrawlD,Mistral-7B-Instruct-v0.3,5664,5664,0,4162,5428,"{""ok"": 5664}",5664,0,0,0
+BCCC,Qwen2.5-Coder-7B-Instruct,19512,19512,0,1106,1241,"{""ok"": 19512}",19512,0,0,0
+BCCC,CodeLlama-7B-Instruct,19512,19512,0,19441,42218,"{""ok"": 19512}",19512,0,0,0
+BCCC,Mistral-7B-Instruct-v0.3,19512,19512,0,16604,23220,"{""ok"": 19512}",19512,0,0,0

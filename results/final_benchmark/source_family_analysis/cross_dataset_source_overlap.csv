@@ -1,0 +1,7 @@
+family_definition,dataset_a,dataset_b,shared_families,dataset_a_records_in_shared_families,dataset_b_records_in_shared_families
+exact_source,SmartBugs-Curated,ScrawlD,0,0,0
+exact_source,SmartBugs-Curated,BCCC,0,0,0
+exact_source,ScrawlD,BCCC,1996,1997,1996
+lexical_normalized,SmartBugs-Curated,ScrawlD,15,15,15
+lexical_normalized,SmartBugs-Curated,BCCC,35,37,39
+lexical_normalized,ScrawlD,BCCC,2004,2180,3676

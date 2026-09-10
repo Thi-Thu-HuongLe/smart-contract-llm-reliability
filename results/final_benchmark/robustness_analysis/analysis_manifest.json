@@ -1,0 +1,116 @@
+{
+  "schema_version": "robustness-analysis",
+  "generated_at_utc": "2026-09-10T01:31:36.380584+00:00",
+  "generator": "analyze_prediction_robustness.py",
+  "generator_sha256": "3d01b2caeaf46980120061f4aef84e408337fcc40360565420917060a9e52c56",
+  "prediction_root": "results/final_benchmark",
+  "parameters": {
+    "bootstrap_repetitions": 10000,
+    "permutation_repetitions": 10000,
+    "seed": 2026,
+    "batch_size": 16,
+    "equivalence_margin": 0.01
+  },
+  "environment": {
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.6",
+    "platform": "Windows-11-10.0.22631-SP0"
+  },
+  "ground_truth_files": [
+    {
+      "dataset": "smartbugs",
+      "path": "data/smartbugs_curated.json",
+      "sha256": "e31d05a40b5affc3864357c7c4710fcb968705d6dc7b2562e5d4773293ce3d60"
+    },
+    {
+      "dataset": "scrawld",
+      "path": "data/scrawld_vulnerabilities.json",
+      "sha256": "72ddf83639a5cbabaf2755ed0593ee98959d879148ff9d12550c28ffd85493f0"
+    }
+  ],
+  "source_jsonl": [
+    {
+      "path": "results/final_benchmark/smartbugs/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_smartbugs.jsonl",
+      "bytes": 357717,
+      "sha256": "057dc1eebb5c4dc9259a38a5029fe2904c7239f9d14b426e1ae594c7f73a4f31"
+    },
+    {
+      "path": "results/final_benchmark/smartbugs/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_smartbugs.jsonl",
+      "bytes": 980048,
+      "sha256": "e0f2c0f67f309daba35a7cd8b16fcdec6654a8ea1525a54eb23231a18923c49c"
+    },
+    {
+      "path": "results/final_benchmark/smartbugs/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_smartbugs.jsonl",
+      "bytes": 391295,
+      "sha256": "e812d797f4685040671d4bad32ff1fdfbbccbb85694e33d4c8894a9d10a4c19e"
+    },
+    {
+      "path": "results/final_benchmark/scrawld/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_scrawld.jsonl",
+      "bytes": 27927049,
+      "sha256": "6b092c79d947e7ca435f70c99d13e440f52031392d21f0e4eb339e756012dae7"
+    },
+    {
+      "path": "results/final_benchmark/scrawld/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_scrawld.jsonl",
+      "bytes": 77385162,
+      "sha256": "499a9425603050184f7862a4c564c67839e588e9c6618b7728c4d7bd16521f4d"
+    },
+    {
+      "path": "results/final_benchmark/scrawld/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_scrawld.jsonl",
+      "bytes": 36397445,
+      "sha256": "6260017a034292af771bf8536096097e4b4a0590c278c00994ca35e72ea6b360"
+    },
+    {
+      "path": "results/final_benchmark/bccc/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_bccc.jsonl",
+      "bytes": 54184050,
+      "sha256": "3e64f9dea68ea212f9ecf3dc9c54a3206a5782e9296356a13cc07247490b4a49"
+    },
+    {
+      "path": "results/final_benchmark/bccc/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_bccc.jsonl",
+      "bytes": 178124361,
+      "sha256": "3f38347ca6e2e42ef756991fe49c3b5e4ee1719801fce9fc0021c8747fee6a84"
+    },
+    {
+      "path": "results/final_benchmark/bccc/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_bccc.jsonl",
+      "bytes": 86740221,
+      "sha256": "d1439b91f08e92df9ad42e0fb64e0b01aea2c76748088657781ca1c3330664bf"
+    }
+  ],
+  "generated_files": [
+    {
+      "path": "results/final_benchmark/robustness_analysis/repair_exposure.csv",
+      "bytes": 2443,
+      "sha256": "75cf4ceecf354e1523b687e0ac3ff5a5b315fbdfdacc86b52a32280006727082"
+    },
+    {
+      "path": "results/final_benchmark/robustness_analysis/repair_sensitivity.csv",
+      "bytes": 20433,
+      "sha256": "df06da5b1b6792e117dcbd0d4308096b23df8739ba30bb95f312dcd7d7ba1350"
+    },
+    {
+      "path": "results/final_benchmark/robustness_analysis/paired_model_comparisons.csv",
+      "bytes": 3277,
+      "sha256": "c948dac0d6c93bb44421ea8bba04e86a81062789feea1a25c3c7d26b3b53253e"
+    },
+    {
+      "path": "results/final_benchmark/robustness_analysis/support_aware_summary.csv",
+      "bytes": 7241,
+      "sha256": "dc3f683b8f415ab7323568372b75753938348d3cae27aaef487478bbb7507cd1"
+    },
+    {
+      "path": "results/final_benchmark/robustness_analysis/support_aware_per_class.csv",
+      "bytes": 14936,
+      "sha256": "8684f1eb06187342d36f269e21d9955dde4e3562bad4477c0822da0332002e74"
+    },
+    {
+      "path": "results/final_benchmark/robustness_analysis/robustness_summary.json",
+      "bytes": 78852,
+      "sha256": "038bf4b92c6b6144a45110a8f8a2ab44d80a239dd951a842c2b2e5c81ac1f8a3"
+    },
+    {
+      "path": "results/final_benchmark/robustness_analysis/ROBUSTNESS_REPORT.md",
+      "bytes": 10650,
+      "sha256": "2633b40dbe78bbe00adf35fc2ffab66e20fd0af94c78206b749d61fe66d01203"
+    }
+  ],
+  "sensitivity_passed": false
+}

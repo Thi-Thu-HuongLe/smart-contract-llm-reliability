@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-# Copyright 2026 Thi-Thu-Huong Le
-# SPDX-License-Identifier: Apache-2.0
-
 """Robustness analysis for the selectively repaired benchmark predictions.
 
 This is an analysis-only pipeline: it never imports Transformers, loads a
@@ -30,6 +27,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
+
+from summarize_repair_exposure import inspect_record as inspect_recovery_record
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -91,7 +90,11 @@ class CompactRecord:
     expected_multilabel: frozenset[str] | None
     expected_binary: int | None
     predicted: frozenset[str]
+    first_attempt_predicted: frozenset[str]
     touched: bool
+    recovery_exposed: bool
+    first_attempt_native_valid: bool
+    format_retry_chunks: int
     inference_actions: int
     structural_actions: int
     already_valid_actions: int
@@ -316,6 +319,7 @@ def load_compact_run(
     ground_truth: dict[str, frozenset[str]] | None,
 ) -> CompactRun:
     records: dict[str, CompactRecord] = {}
+    detected_model = model_name(path)
     with path.open("r", encoding="utf-8") as handle:
         for line_number, line in enumerate(handle, start=1):
             if not line.strip():
@@ -328,6 +332,7 @@ def load_compact_run(
             if key in records:
                 raise ValueError(f"Duplicate record key {key!r} in {path}")
             touched, inference, structural, already_valid = repair_actions(row)
+            recovery, _ = inspect_recovery_record(dataset, detected_model, row, path.name)
             if dataset == "bccc":
                 expected_binary = row.get("ground_truth_binary")
                 if expected_binary not in (0, 1):
@@ -344,13 +349,19 @@ def load_compact_run(
                 expected_multilabel=expected_multilabel,
                 expected_binary=expected_binary,
                 predicted=accepted_predictions(row),
+                first_attempt_predicted=frozenset(
+                    item for item in str(recovery["first_attempt_categories"]).split(";") if item
+                ),
                 touched=touched,
+                recovery_exposed=bool(recovery["any_recovery_exposure"]),
+                first_attempt_native_valid=bool(recovery["first_attempt_native_valid"]),
+                format_retry_chunks=int(recovery["format_retry_chunks"]),
                 inference_actions=inference,
                 structural_actions=structural,
                 already_valid_actions=already_valid,
                 status=str(row.get("status", "missing_status")),
             )
-    return CompactRun(dataset=dataset, model=model_name(path), path=path.resolve(), records=records)
+    return CompactRun(dataset=dataset, model=detected_model, path=path.resolve(), records=records)
 
 
 def load_all_runs(
@@ -412,7 +423,14 @@ def multilabel_metrics(
     per_class = {label: [0, 0, 0] for label in labels}
     for record in records:
         assert record.expected_multilabel is not None
-        predicted = frozenset() if prediction_policy == "repair_as_empty" and record.touched else record.predicted
+        if prediction_policy == "selective_repair_as_empty" and record.touched:
+            predicted = frozenset()
+        elif prediction_policy == "all_recovery_as_empty" and record.recovery_exposed:
+            predicted = frozenset()
+        elif prediction_policy == "first_attempt_strict":
+            predicted = record.first_attempt_predicted
+        else:
+            predicted = record.predicted
         tp, fp, fn = multi_record_counts(record.expected_multilabel, predicted, label_set)
         totals[0] += tp
         totals[1] += fp
@@ -467,8 +485,12 @@ def binary_metrics(records: Sequence[CompactRecord], prediction_policy: str = "f
     for record in records:
         assert record.expected_binary in (0, 1)
         predicted = bool(record.predicted)
-        if prediction_policy == "repair_as_empty" and record.touched:
+        if prediction_policy == "selective_repair_as_empty" and record.touched:
             predicted = False
+        elif prediction_policy == "all_recovery_as_empty" and record.recovery_exposed:
+            predicted = False
+        elif prediction_policy == "first_attempt_strict":
+            predicted = bool(record.first_attempt_predicted)
         if record.expected_binary == 1 and predicted:
             tp += 1
         elif record.expected_binary == 0 and predicted:
@@ -504,6 +526,7 @@ def repair_audit_rows(all_runs: dict[str, dict[str, CompactRun]]) -> list[dict[s
         for model in MODEL_ORDER:
             records = list(all_runs[dataset][model].records.values())
             touched = [record for record in records if record.touched]
+            exposed = [record for record in records if record.recovery_exposed]
             rows.append(
                 {
                     "dataset": DATASET_NAMES[dataset],
@@ -511,6 +534,15 @@ def repair_audit_rows(all_runs: dict[str, dict[str, CompactRun]]) -> list[dict[s
                     "records_total": len(records),
                     "records_touched": len(touched),
                     "records_touched_rate": safe_divide(len(touched), len(records)),
+                    "records_any_recovery": len(exposed),
+                    "records_any_recovery_rate": safe_divide(len(exposed), len(records)),
+                    "records_first_attempt_native_valid": sum(
+                        record.first_attempt_native_valid for record in records
+                    ),
+                    "records_first_attempt_native_valid_rate": safe_divide(
+                        sum(record.first_attempt_native_valid for record in records), len(records)
+                    ),
+                    "chunk_format_retry_actions": sum(record.format_retry_chunks for record in records),
                     "records_with_inference": sum(record.inference_actions > 0 for record in records),
                     "records_with_structural_repair": sum(record.structural_actions > 0 for record in records),
                     "chunk_inference_actions": sum(record.inference_actions for record in records),
@@ -536,15 +568,23 @@ def sensitivity_rows(
             key for key in keys
             if not any(runs[model].records[key].touched for model in MODEL_ORDER)
         ]
+        common_native_valid = [
+            key for key in keys
+            if all(runs[model].records[key].first_attempt_native_valid for model in MODEL_ORDER)
+        ]
         dataset_metrics: dict[str, dict[str, dict[str, float | int]]] = defaultdict(dict)
         for model in MODEL_ORDER:
             run = runs[model]
             all_records = [run.records[key] for key in keys]
             common_records = [run.records[key] for key in common_untouched]
+            common_native_records = [run.records[key] for key in common_native_valid]
             policies = (
                 ("final_all", all_records, "final"),
-                ("repair_as_empty", all_records, "repair_as_empty"),
-                ("common_untouched", common_records, "final"),
+                ("first_attempt_strict_all", all_records, "first_attempt_strict"),
+                ("all_recovery_as_empty", all_records, "all_recovery_as_empty"),
+                ("common_native_valid", common_native_records, "final"),
+                ("selective_repair_as_empty_legacy", all_records, "selective_repair_as_empty"),
+                ("common_selective_untouched_legacy", common_records, "final"),
             )
             final_metrics: dict[str, float | int] | None = None
             for policy, records, prediction_policy in policies:
@@ -564,6 +604,8 @@ def sensitivity_rows(
                     "n": metrics["n"],
                     "common_untouched_n": len(common_untouched),
                     "common_untouched_rate": safe_divide(len(common_untouched), len(keys)),
+                    "common_native_valid_n": len(common_native_valid),
+                    "common_native_valid_rate": safe_divide(len(common_native_valid), len(keys)),
                     "primary_metric": primary_field,
                     "primary_value": metrics[primary_field],
                     "delta_primary_vs_final_all": float(metrics[primary_field]) - float(final_metrics[primary_field]),
@@ -584,6 +626,8 @@ def sensitivity_rows(
             "records_total": len(keys),
             "common_untouched_records": len(common_untouched),
             "common_untouched_rate": safe_divide(len(common_untouched), len(keys)),
+            "common_native_valid_records": len(common_native_valid),
+            "common_native_valid_rate": safe_divide(len(common_native_valid), len(keys)),
             "rankings": rankings,
         }
     return rows, audit
@@ -885,12 +929,16 @@ def sensitivity_assessment(
     overall = True
     for dataset in DATASET_NAMES.values():
         rows = [row for row in sensitivity if row["dataset"] == dataset]
+        full_record_policies = {"first_attempt_strict_all", "all_recovery_as_empty"}
         deltas = [
             abs(float(row["delta_primary_vs_final_all"]))
-            for row in rows if row["policy"] != "final_all"
+            for row in rows if row["policy"] in full_record_policies
         ]
         rankings = audit[dataset]["rankings"]
-        ranking_stable = all(order == rankings["final_all"] for order in rankings.values())
+        ranking_stable = all(
+            rankings[policy] == rankings["final_all"]
+            for policy in (*sorted(full_record_policies), "common_native_valid")
+        )
         max_delta = max(deltas, default=0.0)
         passed = ranking_stable and max_delta <= margin
         overall = overall and passed
@@ -902,7 +950,7 @@ def sensitivity_assessment(
             **audit[dataset],
         }
     return {
-        "criterion": "Ranking unchanged and max |primary metric delta| <= equivalence margin across repair_as_empty and common_untouched policies.",
+        "criterion": "Ranking unchanged across strict first-attempt, all-recovery-as-empty, and common-native-valid analyses; for the two full-record policies, max |primary metric delta| must not exceed the equivalence margin.",
         "overall_passed": overall,
         "datasets": dataset_results,
     }
@@ -991,7 +1039,7 @@ Action counts are chunk-level; touched rates are record-level.
 
 ## Sensitivity metrics
 
-`repair_as_empty` applies the evaluator's conservative no-accepted-finding policy to every record touched by inference or structural repair. `common_untouched` evaluates the identical record subset untouched for all three models.
+`first_attempt_strict_all` reconstructs only schema-valid first responses. `all_recovery_as_empty` treats every recovery-exposed record as having no accepted finding. `common_native_valid` evaluates the identical subset that was valid on the first response for all three models. The two legacy policies are retained only to show how the earlier, narrower selective-repair definition differs.
 
 {sensitivity_table}
 

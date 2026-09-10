@@ -1,6 +1,3 @@
-# Copyright 2026 Thi-Thu-Huong Le
-# SPDX-License-Identifier: Apache-2.0
-
 """Failure-aware, resumable smart-contract vulnerability detection.
 
 This is the GPU inference pipeline for the reliability benchmark. It deliberately
@@ -114,6 +111,7 @@ class RunConfig:
     # explicitly in every new manifest.
     min_new_tokens: int = 1
     format_retries: int = 1
+    prompt_variant: str = "canonical"
     prompt_version: str = "closed-taxonomy-json-with-chunk-status"
     decoding: str = "greedy"
     trust_remote_code: bool = False
@@ -150,6 +148,15 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=1,
         help="Additional deterministic retries for malformed or out-of-taxonomy JSON.",
+    )
+    parser.add_argument(
+        "--prompt-variant",
+        choices=("canonical", "concise", "evidence_checklist"),
+        default="canonical",
+        help=(
+            "Controlled prompt variant for a predeclared sensitivity subset. "
+            "All variants retain the same taxonomy and JSON schema."
+        ),
     )
     parser.add_argument("--code-chunk-tokens", type=int, default=2800)
     parser.add_argument("--chunk-overlap-tokens", type=int, default=128)
@@ -339,8 +346,24 @@ def load_dataset(
     return records
 
 
-def build_system_prompt(categories: Iterable[str]) -> str:
+def build_system_prompt(categories: Iterable[str], variant: str = "canonical") -> str:
     category_text = ", ".join(categories)
+    if variant == "concise":
+        return (
+            "Classify only vulnerabilities supported by the Solidity code. "
+            f"Allowed categories: {category_text}. "
+            "Return only one compact JSON object using "
+            "{\"vulnerabilities\":[{\"category\":\"<allowed category>\"}]}. "
+            "Use {\"vulnerabilities\":[]} when none is supported; do not use Markdown."
+        )
+    checklist = (
+        " Before answering, check every allowed category against explicit code evidence, "
+        "reject findings based only on names, and verify the schema. Do not reveal this "
+        "check; output only the JSON object."
+        if variant == "evidence_checklist" else ""
+    )
+    if variant not in {"canonical", "evidence_checklist"}:
+        raise ValueError(f"Unsupported prompt variant: {variant}")
     return f"""You are a closed-taxonomy smart-contract vulnerability classifier.
 Identify only vulnerabilities supported by the supplied Solidity code chunk.
 
@@ -354,7 +377,7 @@ or fields other than category.
 Schema: {{"vulnerabilities":[{{"category":"<allowed category>"}}]}}
 If no allowed vulnerability is present, return {{"vulnerabilities":[]}}.
 List each category at most once. Do not infer a vulnerability from naming alone;
-base every category on code evidence."""
+base every category on code evidence.{checklist}"""
 
 
 def build_messages(
@@ -530,7 +553,9 @@ def build_run_manifest(config: RunConfig, records: list[dict]) -> dict:
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "config": asdict(config),
         "prompt_sha256": hashlib.sha256(
-            build_system_prompt(TAXONOMIES[config.dataset]).encode("utf-8")
+            build_system_prompt(
+                TAXONOMIES[config.dataset], config.prompt_variant
+            ).encode("utf-8")
         ).hexdigest(),
         "record_count": len(entries),
         "records_sha256": records_sha256,
@@ -864,7 +889,7 @@ def evaluate_record(
         chunk_tokens=config.code_chunk_tokens,
         overlap_tokens=config.chunk_overlap_tokens,
     )
-    system_prompt = build_system_prompt(categories)
+    system_prompt = build_system_prompt(categories, config.prompt_variant)
     chunk_results: list[dict] = []
     aggregate_findings: list[dict] = []
     started = time.perf_counter()
@@ -1081,6 +1106,7 @@ def run_model_dataset(
         max_new_tokens=args.max_new_tokens,
         min_new_tokens=args.min_new_tokens,
         format_retries=args.format_retries,
+        prompt_variant=args.prompt_variant,
         code_chunk_tokens=args.code_chunk_tokens,
         chunk_overlap_tokens=args.chunk_overlap_tokens,
         dtype=args.dtype,
@@ -1088,7 +1114,11 @@ def run_model_dataset(
     )
     run_dir = args.output_root / dataset_name
     run_dir.mkdir(parents=True, exist_ok=True)
-    stem = f"results_{safe_filename(spec.repository)}_{spec.revision[:12]}_{dataset_name}"
+    variant_suffix = "" if args.prompt_variant == "canonical" else f"_{args.prompt_variant}"
+    stem = (
+        f"results_{safe_filename(spec.repository)}_{spec.revision[:12]}_"
+        f"{dataset_name}{variant_suffix}"
+    )
     output_path = run_dir / f"{stem}.jsonl"
     metadata_path = run_dir / f"{stem}.metadata.json"
     manifest = build_run_manifest(config, records)
@@ -1170,7 +1200,7 @@ def print_dry_run(specs: list[ModelSpec], datasets: dict[str, list[dict]], args:
         "Validated settings: "
         f"seed={args.seed}, max_input_tokens={args.max_input_tokens}, "
         f"max_new_tokens={args.max_new_tokens}, min_new_tokens={args.min_new_tokens}, "
-        f"format_retries={args.format_retries}."
+        f"format_retries={args.format_retries}, prompt_variant={args.prompt_variant}."
     )
 
 

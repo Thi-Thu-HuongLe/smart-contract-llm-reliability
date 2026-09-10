@@ -1,19 +1,19 @@
-dataset,candidate,baseline,metric,observed_difference,bootstrap_ci95_lower,bootstrap_ci95_upper,bootstrap_repetitions,ci_excludes_zero
-SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),Qwen2.5-Coder-7B-Instruct,micro_f1,-0.014725101251245376,-0.03739960716848511,0.00693692242395963,2000,False
-SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),CodeLlama-7B-Instruct,micro_f1,0.27579761402994374,0.2026358413842658,0.3412423459826606,2000,True
-SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),Mistral-7B-Instruct-v0.3,micro_f1,0.033686213289101374,-0.0031821156097936866,0.07334876222175982,2000,False
-SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),OR-3 ensemble,micro_f1,0.2727248887684548,0.20783723530688045,0.3371456267432835,2000,True
-SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),Majority-3 ensemble,micro_f1,-0.005540513437625294,-0.0317339860210169,0.02235970366103348,2000,False
-SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),AND-3 ensemble,micro_f1,0.01301255455574113,-0.010377193926748959,0.03879807476310572,2000,False
-ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),Qwen2.5-Coder-7B-Instruct,micro_f1,0.5862462326079771,0.5762853610021677,0.5968382960810423,2000,True
-ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),CodeLlama-7B-Instruct,micro_f1,0.49024032565277686,0.47857334765521703,0.502114644042951,2000,True
-ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),Mistral-7B-Instruct-v0.3,micro_f1,0.5193325933914648,0.5059641487181213,0.5316211733622406,2000,True
-ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),OR-3 ensemble,micro_f1,0.4654290242990584,0.4529956028267126,0.47834172423601795,2000,True
-ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),Majority-3 ensemble,micro_f1,0.5654821442371537,0.5539094418302974,0.5763253975902027,2000,True
-ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),AND-3 ensemble,micro_f1,0.5969513209857236,0.5868136424555264,0.6069783101931869,2000,True
-BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),Qwen2.5-Coder-7B-Instruct,balanced_accuracy,0.020090200902009026,0.01408102083450021,0.025966797893922845,2000,True
-BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),CodeLlama-7B-Instruct,balanced_accuracy,0.018193931939319397,0.01336705279246384,0.023056108326185175,2000,True
-BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),Mistral-7B-Instruct-v0.3,balanced_accuracy,-0.00020500205002049743,-0.0005139277537521442,5.3969198764844364e-05,2000,False
-BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),OR-3 ensemble,balanced_accuracy,0.01829643296432959,0.013486413696749178,0.023348703858191263,2000,True
-BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),Majority-3 ensemble,balanced_accuracy,0.0009225092250922939,-8.030575941290474e-05,0.0019072246604976111,2000,False
-BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),AND-3 ensemble,balanced_accuracy,0.018860188601885985,0.013345062212604175,0.024546052726648365,2000,True
+dataset,candidate,baseline,metric,observed_difference,bootstrap_ci95_lower,bootstrap_ci95_upper,bootstrap_repetitions,ci_excludes_zero,uncertainty_scope,pipeline_refitted_within_bootstrap
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),Qwen2.5-Coder-7B-Instruct,micro_f1,-0.014725101251245376,-0.03739960716848511,0.00693692242395963,2000,False,conditional_on_fixed_oof_predictions,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),CodeLlama-7B-Instruct,micro_f1,0.27579761402994374,0.2026358413842658,0.3412423459826606,2000,True,conditional_on_fixed_oof_predictions,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),Mistral-7B-Instruct-v0.3,micro_f1,0.033686213289101374,-0.0031821156097936866,0.07334876222175982,2000,False,conditional_on_fixed_oof_predictions,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),OR-3 ensemble,micro_f1,0.2727248887684548,0.20783723530688045,0.3371456267432835,2000,True,conditional_on_fixed_oof_predictions,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),Majority-3 ensemble,micro_f1,-0.005540513437625294,-0.0317339860210169,0.02235970366103348,2000,False,conditional_on_fixed_oof_predictions,False
+SmartBugs-Curated,TACE-F1 (cross-fitted empirical-Bayes ensemble),AND-3 ensemble,micro_f1,0.01301255455574113,-0.010377193926748959,0.03879807476310572,2000,False,conditional_on_fixed_oof_predictions,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),Qwen2.5-Coder-7B-Instruct,micro_f1,0.5862462326079771,0.5762853610021677,0.5968382960810423,2000,True,conditional_on_fixed_oof_predictions,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),CodeLlama-7B-Instruct,micro_f1,0.49024032565277686,0.47857334765521703,0.502114644042951,2000,True,conditional_on_fixed_oof_predictions,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),Mistral-7B-Instruct-v0.3,micro_f1,0.5193325933914648,0.5059641487181213,0.5316211733622406,2000,True,conditional_on_fixed_oof_predictions,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),OR-3 ensemble,micro_f1,0.4654290242990584,0.4529956028267126,0.47834172423601795,2000,True,conditional_on_fixed_oof_predictions,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),Majority-3 ensemble,micro_f1,0.5654821442371537,0.5539094418302974,0.5763253975902027,2000,True,conditional_on_fixed_oof_predictions,False
+ScrawlD,TACE-F1 (cross-fitted empirical-Bayes ensemble),AND-3 ensemble,micro_f1,0.5969513209857236,0.5868136424555264,0.6069783101931869,2000,True,conditional_on_fixed_oof_predictions,False
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),Qwen2.5-Coder-7B-Instruct,balanced_accuracy,0.020090200902009026,0.01408102083450021,0.025966797893922845,2000,True,conditional_on_fixed_oof_predictions,False
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),CodeLlama-7B-Instruct,balanced_accuracy,0.018193931939319397,0.01336705279246384,0.023056108326185175,2000,True,conditional_on_fixed_oof_predictions,False
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),Mistral-7B-Instruct-v0.3,balanced_accuracy,-0.00020500205002049743,-0.0005139277537521442,5.3969198764844364e-05,2000,False,conditional_on_fixed_oof_predictions,False
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),OR-3 ensemble,balanced_accuracy,0.01829643296432959,0.013486413696749178,0.023348703858191263,2000,True,conditional_on_fixed_oof_predictions,False
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),Majority-3 ensemble,balanced_accuracy,0.0009225092250922939,-8.030575941290474e-05,0.0019072246604976111,2000,False,conditional_on_fixed_oof_predictions,False
+BCCC,TACE-F1 (cross-fitted empirical-Bayes ensemble),AND-3 ensemble,balanced_accuracy,0.018860188601885985,0.013345062212604175,0.024546052726648365,2000,True,conditional_on_fixed_oof_predictions,False

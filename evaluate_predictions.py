@@ -1,6 +1,3 @@
-# Copyright 2026 Thi-Thu-Huong Le
-# SPDX-License-Identifier: Apache-2.0
-
 """Evaluate JSONL produced by :mod:`run_frozen_llm_inference` against labels.
 
 Unlike the retrospective evaluator, this script consumes the new failure-aware

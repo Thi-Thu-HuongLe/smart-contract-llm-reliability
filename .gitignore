@@ -18,3 +18,11 @@ results/final_benchmark/scrawld/*.jsonl
 results/final_benchmark/scrawld/*.metadata.json
 results/final_benchmark/bccc/*.jsonl
 results/final_benchmark/bccc/*.metadata.json
+
+# Row-level derived outputs belong in the DOI-backed research-data deposit.
+results/final_benchmark/robustness_analysis/recovery_path_records.csv
+results/final_benchmark/recovery_baseline_analysis/recovery_oof_predictions.csv
+results/final_benchmark/tace_analysis/tace_fold_assignments.csv
+results/final_benchmark/tace_analysis/tace_oof_predictions.csv
+results/final_benchmark/source_family_analysis/grouped_fold_assignments.csv
+results/final_benchmark/source_family_analysis/grouped_tace_oof_predictions.csv

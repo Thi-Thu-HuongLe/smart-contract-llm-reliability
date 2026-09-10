@@ -1,0 +1,269 @@
+{
+  "schema_version": "recovery-baselines-1",
+  "generated_at_utc": "2026-09-10T01:34:59.793514+00:00",
+  "generator": "analyze_recovery_baselines.py",
+  "generator_sha256": "6268a76da603fccf58abb63ffa5a66405e63f7fe38c96fa35471c81c64b65ce9",
+  "scope": "analysis-only; reuses fixed model predictions and exact TACE outer folds",
+  "methods": {
+    "prevalence_only": "Beta(1,1)-smoothed class prevalence; no model-output features; nested threshold selection",
+    "logistic_stacker": "one L2 logistic model per class using three binary model votes; nested joint regularization and threshold selection"
+  },
+  "protocol": {
+    "outer_folds": 5,
+    "inner_folds": 3,
+    "candidate_thresholds": [
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95
+    ],
+    "regularization_c": [
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "tace_seed_for_inner_folds": 20260811,
+    "recovery_seed": 20260813,
+    "bootstrap_repetitions": 10000,
+    "permutation_repetitions": 10000,
+    "selected_configs": {
+      "smartbugs": {
+        "0": {
+          "prevalence_threshold": 0.2,
+          "prevalence_inner_primary": 0.3850574712643678,
+          "stacker_threshold": 0.3,
+          "stacker_inverse_l2_c": 1.0,
+          "stacker_inner_primary": 0.9511111111111111
+        },
+        "1": {
+          "prevalence_threshold": 0.2,
+          "prevalence_inner_primary": 0.3834808259587021,
+          "stacker_threshold": 0.35,
+          "stacker_inverse_l2_c": 1.0,
+          "stacker_inner_primary": 0.9502262443438914
+        },
+        "2": {
+          "prevalence_threshold": 0.2,
+          "prevalence_inner_primary": 0.3893805309734513,
+          "stacker_threshold": 0.35,
+          "stacker_inverse_l2_c": 1.0,
+          "stacker_inner_primary": 0.9541284403669725
+        },
+        "3": {
+          "prevalence_threshold": 0.2,
+          "prevalence_inner_primary": 0.3850574712643678,
+          "stacker_threshold": 0.3,
+          "stacker_inverse_l2_c": 1.0,
+          "stacker_inner_primary": 0.96
+        },
+        "4": {
+          "prevalence_threshold": 0.2,
+          "prevalence_inner_primary": 0.391812865497076,
+          "stacker_threshold": 0.35,
+          "stacker_inverse_l2_c": 1.0,
+          "stacker_inner_primary": 0.968609865470852
+        }
+      },
+      "scrawld": {
+        "0": {
+          "prevalence_threshold": 0.25,
+          "prevalence_inner_primary": 0.5978577096006348,
+          "stacker_threshold": 0.3,
+          "stacker_inverse_l2_c": 0.1,
+          "stacker_inner_primary": 0.6013696161470535
+        },
+        "1": {
+          "prevalence_threshold": 0.25,
+          "prevalence_inner_primary": 0.5975448785638859,
+          "stacker_threshold": 0.3,
+          "stacker_inverse_l2_c": 0.1,
+          "stacker_inner_primary": 0.6024139794631598
+        },
+        "2": {
+          "prevalence_threshold": 0.25,
+          "prevalence_inner_primary": 0.5979926043317485,
+          "stacker_threshold": 0.3,
+          "stacker_inverse_l2_c": 0.1,
+          "stacker_inner_primary": 0.6018176909925312
+        },
+        "3": {
+          "prevalence_threshold": 0.25,
+          "prevalence_inner_primary": 0.597854872881356,
+          "stacker_threshold": 0.25,
+          "stacker_inverse_l2_c": 1.0,
+          "stacker_inner_primary": 0.5988182964880834
+        },
+        "4": {
+          "prevalence_threshold": 0.25,
+          "prevalence_inner_primary": 0.5979613449827905,
+          "stacker_threshold": 0.3,
+          "stacker_inverse_l2_c": 10.0,
+          "stacker_inner_primary": 0.6040558810274899
+        }
+      },
+      "bccc": {
+        "0": {
+          "prevalence_threshold": 0.95,
+          "prevalence_inner_primary": 0.5,
+          "stacker_threshold": 0.45,
+          "stacker_inverse_l2_c": 0.1,
+          "stacker_inner_primary": 0.5213883236671941
+        },
+        "1": {
+          "prevalence_threshold": 0.95,
+          "prevalence_inner_primary": 0.5,
+          "stacker_threshold": 0.45,
+          "stacker_inverse_l2_c": 0.1,
+          "stacker_inner_primary": 0.5188981422165279
+        },
+        "2": {
+          "prevalence_threshold": 0.95,
+          "prevalence_inner_primary": 0.5,
+          "stacker_threshold": 0.45,
+          "stacker_inverse_l2_c": 0.01,
+          "stacker_inner_primary": 0.5208199871877002
+        },
+        "3": {
+          "prevalence_threshold": 0.95,
+          "prevalence_inner_primary": 0.5,
+          "stacker_threshold": 0.5,
+          "stacker_inverse_l2_c": 0.01,
+          "stacker_inner_primary": 0.5201901339381141
+        },
+        "4": {
+          "prevalence_threshold": 0.95,
+          "prevalence_inner_primary": 0.5,
+          "stacker_threshold": 0.5,
+          "stacker_inverse_l2_c": 0.01,
+          "stacker_inner_primary": 0.5199231262011531
+        }
+      }
+    }
+  },
+  "environment": {
+    "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.4.6",
+    "platform": "Windows-11-10.0.22631-SP0"
+  },
+  "inputs": [
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_fold_assignments.csv",
+      "sha256": "a145dde535affdc6d5dfba4f1114e10fcd092d67d03667d028004f686354c7e1"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_oof_predictions.csv",
+      "sha256": "563a5bfbcec21c72d961b8495ee7a8088ed662b4f1e2cb6c520c8171ae68207f"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_oof_summary.csv",
+      "sha256": "f0027f4c3e2b5cf0b6149f1aa6339781823308bc16ff1ba1f66fcbbfae291df3"
+    },
+    {
+      "path": "data/scrawld_vulnerabilities.json",
+      "sha256": "72ddf83639a5cbabaf2755ed0593ee98959d879148ff9d12550c28ffd85493f0"
+    },
+    {
+      "path": "data/smartbugs_curated.json",
+      "sha256": "e31d05a40b5affc3864357c7c4710fcb968705d6dc7b2562e5d4773293ce3d60"
+    },
+    {
+      "path": "results/final_benchmark/bccc/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_bccc.jsonl",
+      "sha256": "3f38347ca6e2e42ef756991fe49c3b5e4ee1719801fce9fc0021c8747fee6a84"
+    },
+    {
+      "path": "results/final_benchmark/bccc/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_bccc.jsonl",
+      "sha256": "d1439b91f08e92df9ad42e0fb64e0b01aea2c76748088657781ca1c3330664bf"
+    },
+    {
+      "path": "results/final_benchmark/bccc/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_bccc.jsonl",
+      "sha256": "3e64f9dea68ea212f9ecf3dc9c54a3206a5782e9296356a13cc07247490b4a49"
+    },
+    {
+      "path": "results/final_benchmark/scrawld/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_scrawld.jsonl",
+      "sha256": "499a9425603050184f7862a4c564c67839e588e9c6618b7728c4d7bd16521f4d"
+    },
+    {
+      "path": "results/final_benchmark/scrawld/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_scrawld.jsonl",
+      "sha256": "6260017a034292af771bf8536096097e4b4a0590c278c00994ca35e72ea6b360"
+    },
+    {
+      "path": "results/final_benchmark/scrawld/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_scrawld.jsonl",
+      "sha256": "6b092c79d947e7ca435f70c99d13e440f52031392d21f0e4eb339e756012dae7"
+    },
+    {
+      "path": "results/final_benchmark/smartbugs/results_codellama_CodeLlama-7b-Instruct-hf_22cb240e0292_smartbugs.jsonl",
+      "sha256": "e0f2c0f67f309daba35a7cd8b16fcdec6654a8ea1525a54eb23231a18923c49c"
+    },
+    {
+      "path": "results/final_benchmark/smartbugs/results_mistralai_Mistral-7B-Instruct-v0.3_c170c708c41d_smartbugs.jsonl",
+      "sha256": "e812d797f4685040671d4bad32ff1fdfbbccbb85694e33d4c8894a9d10a4c19e"
+    },
+    {
+      "path": "results/final_benchmark/smartbugs/results_Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207_smartbugs.jsonl",
+      "sha256": "057dc1eebb5c4dc9259a38a5029fe2904c7239f9d14b426e1ae594c7f73a4f31"
+    }
+  ],
+  "generated_files": [
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_baseline_per_class.csv",
+      "bytes": 6606,
+      "sha256": "64c2ed8bef93fc35758ad428382b6748b52d036fd61c7d7d652d62575167ad69"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_baseline_summary.csv",
+      "bytes": 2594,
+      "sha256": "1da141b1f7d91d4843bdaf1bf1171202e76a5cbd9cc2dc01ca21dc681dd7ae05"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_calibration_discrimination.csv",
+      "bytes": 1195,
+      "sha256": "5373d481f89941864876ed7032c7fd4349dfab96fcfb10479329534c3dba058b"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_calibration_per_class.csv",
+      "bytes": 8497,
+      "sha256": "eb96c0f40f93c7a60a828ccd0c70beb73e603d40e9de04e8c41a6739926e4b7e"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_mechanism_summary.csv",
+      "bytes": 804,
+      "sha256": "2f1deb0ffd0af4d7e6bbec8b0df6fc2fedc8bba9b6f58a819462b0605192bef1"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_nested_selection.csv",
+      "bytes": 241095,
+      "sha256": "2c47fde6b406de4b72dc9713fec6378ad5732b12dc9c1118fcb173fa62bf775f"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_oof_predictions.csv",
+      "bytes": 9226939,
+      "sha256": "d193e76e5da466bb5af9157ec2001178e372d3aa499d9949f381b4f12bd65f64"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_paired_comparisons.csv",
+      "bytes": 2987,
+      "sha256": "10eb85e30bc1190708210780f41235d7eb533203a5ce2f164e4acd5b1c09d708"
+    },
+    {
+      "path": "results/final_benchmark/recovery_baseline_analysis/recovery_pattern_diagnostics.csv",
+      "bytes": 6577,
+      "sha256": "f283c15cb1ac796597c5fb168911e5ed5884310a73d4888c29e0013e2a6d33e3"
+    }
+  ]
+}

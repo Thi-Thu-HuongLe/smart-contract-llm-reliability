@@ -2,9 +2,9 @@
   "schema_version": "tace-crossfit-analysis",
   "method": "TACE (cross-fitted empirical-Bayes ensemble)",
   "method_scope": "analysis-only post-inference fusion; no model generation or retraining",
-  "generated_at_utc": "2026-08-14T02:04:08.813730+00:00",
+  "generated_at_utc": "2026-09-10T01:32:31.760380+00:00",
   "generator": "analyze_tace_crossfit.py",
-  "generator_sha256": "f0aa7492c1d05f8c494eadf78f9998327154f3eb82db19626f080ca9d80b3d83",
+  "generator_sha256": "75dc820e1bf365d2a03810b44480b0972dee5155419d0221a12dd8e251a8b0b2",
   "prediction_root": "results/final_benchmark",
   "parameters": {
     "outer_folds": 5,
@@ -36,6 +36,13 @@
       0.95
     ],
     "pattern_shrinkage": 8.0,
+    "shrinkage_sensitivity_grid": [
+      2.0,
+      4.0,
+      8.0,
+      16.0,
+      32.0
+    ],
     "bootstrap_repetitions": 2000,
     "seed": 20260811
   },
@@ -44,11 +51,12 @@
     "The estimator makes no conditional-independence claim about the three models.",
     "Every reported TACE posterior is fitted without that record's outer test fold.",
     "TACE-F1 and TACE-Macro thresholds are selected only with nested inner folds; fixed confidence values define the selective curve.",
-    "BCCC is evaluated as binary vulnerable-versus-secure; SmartBugs-Curated and ScrawlD are closed-taxonomy multilabel tasks."
+    "BCCC is evaluated as binary vulnerable-versus-secure; SmartBugs-Curated and ScrawlD are closed-taxonomy multilabel tasks.",
+    "Paired bootstrap intervals are conditional on the retained OOF predictions; calibration and threshold fitting are not repeated inside each bootstrap sample."
   ],
   "environment": {
     "python": "3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]",
-    "numpy": "2.5.1",
+    "numpy": "2.4.6",
     "platform": "Windows-11-10.0.22631-SP0"
   },
   "ground_truth_files": [
@@ -121,6 +129,16 @@
   ],
   "generated_files": [
     {
+      "path": "results/final_benchmark/tace_analysis/tace_bccc_confusion_matrix.csv",
+      "bytes": 1108,
+      "sha256": "a63a0f017fa3851927597dadea62fe68a23f84bb232dabeadd1d42babb69deaa"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_calibration_per_class.csv",
+      "bytes": 3021,
+      "sha256": "7e72b42d5e87043a825368c12eace8b5b5c56ae3a96d6b2059da6e348c2f3c1d"
+    },
+    {
       "path": "results/final_benchmark/tace_analysis/tace_calibration_summary.csv",
       "bytes": 370,
       "sha256": "86115ce810df2c1d0b5f5ac6e5339d5bc071d79c533000354bd70e1c6c826c00"
@@ -147,8 +165,8 @@
     },
     {
       "path": "results/final_benchmark/tace_analysis/tace_paired_bootstrap.csv",
-      "bytes": 3069,
-      "sha256": "764bd85f9f2dac0bd6cf0a8338ca8100a77e25382096ea22c2f85facc155da44"
+      "bytes": 3896,
+      "sha256": "784b2d35693d919f8295a05bca79c2a4e0bdf085287c6fc6957c2add245450ec"
     },
     {
       "path": "results/final_benchmark/tace_analysis/tace_reliability_bins.csv",
@@ -157,8 +175,13 @@
     },
     {
       "path": "results/final_benchmark/tace_analysis/tace_selective_risk_coverage.csv",
-      "bytes": 1207,
-      "sha256": "2fa4a6749b1986ed0fe5f5796574c89e3210f95833c88bdc7028246593e3def3"
+      "bytes": 1869,
+      "sha256": "b00152801b1a42085bcb68722c9290037dfeb64b339d911a14ae0c4c2716a055"
+    },
+    {
+      "path": "results/final_benchmark/tace_analysis/tace_shrinkage_sensitivity.csv",
+      "bytes": 5580,
+      "sha256": "bd9dd010966590f5bc22454f0de567b8c3fef037c03747e27fac2e83f59bd958"
     },
     {
       "path": "results/final_benchmark/tace_analysis/tace_threshold_selection.csv",

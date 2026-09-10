@@ -1,6 +1,3 @@
-# Copyright 2026 Thi-Thu-Huong Le
-# SPDX-License-Identifier: Apache-2.0
-
 """Shared metric and reference-loading utilities for benchmark evaluation."""
 
 from __future__ import annotations
