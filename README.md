@@ -2,8 +2,8 @@
 
 This repository supports a reliability study of frozen code language models
 for smart-contract vulnerability detection. It contains the inference,
-validation, selective-output recovery, evaluation, statistical-analysis, and
-figure-generation programs used in the study.
+validation, selective-output recovery, evaluation, and statistical-analysis
+programs used in the study.
 
 ## Study scope
 
@@ -31,7 +31,6 @@ smart-contract-llm-reliability/
 |       |-- robustness_analysis/  Sensitivity and paired analyses
 |       |-- tace_analysis/        Cross-fitted TACE results
 |       `-- recovery_baseline_analysis/
-|-- outputs/                      Regenerated figures and temporary checks
 |-- run_frozen_llm_inference.py
 |-- repair_invalid_outputs.py
 |-- evaluate_predictions.py
@@ -39,7 +38,6 @@ smart-contract-llm-reliability/
 |-- analyze_source_family_robustness.py
 `-- analyze_recovery_baselines.py
 ```
-
 
 
 ## Main programs
@@ -67,13 +65,6 @@ smart-contract-llm-reliability/
 - `analyze_source_family_robustness.py`: audit exact/lexical source overlap and
   rerun TACE with source-family-grouped outer and inner folds.
 
-### Figures
-
-- `plot_benchmark_results.py`
-- `plot_tace_results.py`
-- `plot_recovery_baselines.py`
-- `plot_study_framework.py`
-- `plot_tace_framework.py`
 
 ## Environment setup
 
@@ -83,7 +74,6 @@ dependency group:
 ```bash
 python -m pip install -r requirements-inference.txt
 python -m pip install -r requirements-analysis.txt
-python -m pip install -r requirements-visualization.txt
 ```
 
 ## Reproduce the retained analyses

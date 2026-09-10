@@ -1,5 +1,0 @@
-# Separate from the GPU/inference environment on purpose.
-# Install in a lightweight plotting environment:
-#   python -m pip install -r requirements-visualization.txt
-matplotlib==3.10.5
-numpy==2.3.2
